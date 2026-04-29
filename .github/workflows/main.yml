@@ -1,10 +1,9 @@
 name: Build Android APK (Python Kivy)
 
-# ビルドを開始するタイミング
 on:
   push:
-    branches: [ "main" ]  # mainブランチに保存されたら動く
-  workflow_dispatch:      # Actionsタブから手動でボタンを押しても動く
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # ここが新しいビルドの命令だよ！
       - name: Build with Buildozer
-        uses: ArtemSerebrenninkov/buildozer-action@v1
+        uses: pypa/buildozer-action@v1
         with:
-          buildozer_version: stable
-          python_version: 3.11
+          save_buildozer_folder: true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
