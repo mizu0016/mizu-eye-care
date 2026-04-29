@@ -13,11 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ここが新しいビルドの命令だよ！
-      - name: Build with Buildozer
-        uses: pypa/buildozer-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          save_buildozer_folder: true
+          python_version: '3.11'
+
+      # ビルドに必要な「下準備」を全部書いたよ！
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --user --upgrade Cython==0.29.33 buildozer
+
+      - name: Build with Buildozer
+        run: |
+          export PATH=$PATH:$HOME/.local/bin
+          buildozer android debug
+        env:
+          ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
