@@ -13,9 +13,9 @@ android.allow_backup = True
 android.permissions = INTERNET, POST_NOTIFICATIONS
 
 # ここから下が大事な追加設定！
-android.api = 33
+android.api = 31
 android.minapi = 21
 android.ndk = 25b
-android.sdk = 33
+android.sdk = 31
 android.skip_update = False
 android.accept_sdk_license = True
