@@ -18,10 +18,10 @@ jobs:
         with:
           python_version: '3.11'
 
-      - name: Set up JDK 17
+      - name: Set up JDK 11  # 17から11に変えて安定性を上げたよ！
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'temurin'
 
       - name: Install dependencies
@@ -33,8 +33,9 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # ↓ここ！Buildozerが迷子にならないように「ここがアプリの場所だよ」と教えるよ
-          buildozer android debug || (echo "ビルド失敗！ログを確認してね" && exit 1)
+          # 以前の失敗データが残らないように掃除してからビルド！
+          buildozer android clean
+          yes | buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
 
