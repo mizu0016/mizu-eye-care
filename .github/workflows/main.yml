@@ -13,31 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python_version: '3.11'
-
-      - name: Set up JDK 11  # 17から11に変えて安定性を上げたよ！
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncursesw6 cmake libffi-dev libssl-dev python3-pip libsqlite3-dev
-          pip install --user --upgrade Cython==0.29.33 buildozer
-
+      # これが公式の「Buildozer Action」だよ！
+      # さっきのエラーはスペルやバージョンの指定が古かったんだ。
       - name: Build with Buildozer
-        run: |
-          export PATH=$PATH:$HOME/.local/bin
-          # 以前の失敗データが残らないように掃除してからビルド！
-          buildozer android clean
-          yes | buildozer android debug
-        env:
-          ACCEPT_SDK_LICENSE: "yes"
+        uses: ArtemSerebrenninkov/buildozer-action@v1
+        with:
+          buildozer_version: stable
+          python_version: 3.11
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
